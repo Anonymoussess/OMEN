@@ -1,0 +1,17 @@
+method,network,avg_qoe
+OMEN,5G stationary,1876
+OMEN,5G mov,2423
+OMEN,WiFi stationary,1289
+OMEN,WiFi mov,1589
+Bola,5G stationary,1737
+Bola,5G mov,2323
+Bola,WiFi stationary,1132
+Bola,WiFi mov,1356
+Pensieve,5G stationary,1721
+Pensieve,5G mov,2355
+Pensieve,WiFi stationary,948
+Pensieve,WiFi mov,1493
+Comyco,5G stationary,1633
+Comyco,5G mov,2435
+Comyco,WiFi stationary,846
+Comyco,WiFi mov,1269
