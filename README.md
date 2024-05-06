@@ -24,10 +24,15 @@ For more tests on other network conditions and more indicators, please refer to 
 
 ## Modules Guide
 
-[modified_abr](modified_abr)： Mainly storing the ABR algorithm part that we modified
+We will divide the code into several modules, which are:
 
-[outside_comm](outside_comm)： Mainly stores the relevant code on how to complete the capture of CC data and push the client
+[modified_abr](modified_abr) : Mainly storing the ABR algorithm part that we modified
 
-[lab](lab)：  Mainly stores some typical experimental data and code
+[outside_comm](outside_comm) : Mainly stores the relevant code on how to complete the capture of CC data and push the client
+
+[lab](lab) :  Mainly stores some typical experimental data and code
 
 We have written specific readme file instructions within each module, please refer to them.
+
+## Tips
+
