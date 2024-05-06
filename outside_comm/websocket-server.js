@@ -58,6 +58,8 @@ function getNginxPid() {
 }
 
 getNginxPid();
+var find = runStap();
+const readline = require('readline');
 
 function runStap() {
 //systemtap
@@ -65,30 +67,30 @@ function runStap() {
     const cmd = 'sudo'; // 运行的外部命令
     const find = spawn(cmd, ['/home/cc/systemtap-4.9/stap', '/home/cc/systemtap-test/socket-trace.stp']);
 
-//const find = exec(cmd);
+    //const find = exec(cmd);
     find.stdout.setEncoding('utf8');
-    const readline = require('readline');
 
-
-// 监听子进程的关闭事件
-    find.on('close', (code) => {
-        console.log(`子进程退出，退出码 ${code}`);
-    });
-    find.on('error', (error) => {
-        console.error('子进程出现错误：', error);
-    });
-    return {find, readline};
+    return find;
 }
 
-const {find, readline} = runStap();
+// 监听子进程的关闭事件
+find.on('close', (code) => {
+    console.log(`子进程退出，退出码 ${code}`);
+    find = runStap();
+});
+find.on('error', (error) => {
+    console.error('子进程出现错误：', error);
+    find=runStap()
+});
+
 
 //ws
 const server = new WebSocket.Server({port: 3000});
 let handler = monitorCpuUsageToFile('cpu.csv', 100);
 
 server.on('connection', (socket, request) => {
-    let lastCwnd=0;
-    let lastCwndTime=0
+    let lastCwnd = 0;
+    let lastCwndTime = 0
     let clientIP = request.connection.remoteAddress;
 
     // Check if the IP address is IPv6
@@ -109,7 +111,7 @@ server.on('connection', (socket, request) => {
     // });
 
     // 创建逐行读取接口
-    const rl = readline.createInterface({
+    let rl = readline.createInterface({
         input: find.stdout
     });
     // 监听每一行输出
@@ -142,12 +144,11 @@ server.on('connection', (socket, request) => {
                     break;
                 }
             }
-        }
-        else if (kind_part.includes("cwnd")) {
+        } else if (kind_part.includes("cwnd")) {
             line = line.substring(line.indexOf("->") + 2).trim();
             const timestamp = new Date().getTime();
-            if(Math.abs(timestamp-lastCwndTime)<10) return;
-            else lastCwndTime=timestamp;
+            if (Math.abs(timestamp - lastCwndTime) < 10) return;
+            else lastCwndTime = timestamp;
 
             // 提取 IP 地址
             const ipRegex = /ip: \[(\d+\.\d+\.\d+\.\d+)\]/;
@@ -167,8 +168,8 @@ server.on('connection', (socket, request) => {
             const curCwndMatch = line.match(curCwndRegex);
             const curCwnd = curCwndMatch ? parseInt(curCwndMatch[1]) : -1;
 
-            if(lastCwnd===curCwnd) return;
-            else lastCwnd=curCwnd;
+            if (lastCwnd === curCwnd) return;
+            else lastCwnd = curCwnd;
 
             // 提取 last_max_cwnd
             const lastMaxCwndRegex = /last_max_cwnd: \[(\d+)\]/;
