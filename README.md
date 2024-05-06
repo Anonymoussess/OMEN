@@ -32,7 +32,12 @@ We will divide the code into several modules, which are:
 
 [lab](lab) :  Mainly stores some typical experimental data and code
 
+[env](env) : Mainly stores the environment configuration and kernel modification code
+
 We have written specific readme file instructions within each module, please refer to them.
 
 ## Tips
 
+Before running the outside_comm module, because it calls the stap script, and in the stap we use, the part that grabs the function call is native and can be run directly. However, the part that grabs the current cwnd, rtt, and ca_state values is the code that our school server modified the kernel and added the grabbing information (which should also be able to obtain this information non invasively, but for convenience, we temporarily chose to modify the Linux kernel directly), so we need to compile the kernel first, replace the kernel with our modified kernel, and then run the outside_comm module.
+
+The specific kernel compilation and replacement methods, as well as the preparation of the stap script, can be referred to in [env](env)
